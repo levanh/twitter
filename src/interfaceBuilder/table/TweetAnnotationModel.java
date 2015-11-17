@@ -7,8 +7,7 @@ import javax.swing.table.AbstractTableModel;
 
 import utility.Tweet;
 
-public class TweetAnnotationModel extends AbstractTableModel{
-
+public class TweetAnnotationModel extends AbstractTableModel {
 	/**
 	 * 
 	 */
@@ -42,7 +41,7 @@ public class TweetAnnotationModel extends AbstractTableModel{
 		}
 	}
 	
-	public void addRow(Tweet t){
+	public void addRow(Tweet t) {
 		
 		data.add(t);
 		fireTableRowsInserted(data.size(), data.size());
@@ -52,7 +51,7 @@ public class TweetAnnotationModel extends AbstractTableModel{
 		for(Tweet t: list){
 			addRow(t);
 		}
-		fireTableStructureChanged();
+		fireTableDataChanged();
 	}
 	
 	public Class getColumnClass(int c) {
@@ -64,7 +63,7 @@ public class TweetAnnotationModel extends AbstractTableModel{
 		}
 	}
 	
-	public boolean isCellEditable(int row, int col){
+	public boolean isCellEditable(int row, int col) {
 		if (col == 0){
 			return false;
 		}
@@ -73,7 +72,7 @@ public class TweetAnnotationModel extends AbstractTableModel{
 		}
 	}
 	
-	public void setValueAt(Object value, int row, int col){
+	public void setValueAt(Object value, int row, int col) {
 		System.out.println("Setting value at " + row + "," + col
 	            + " to " + value + " (an instance of "
 	            + value.getClass() + ")");
@@ -84,8 +83,7 @@ public class TweetAnnotationModel extends AbstractTableModel{
 			data.get(row).setNote(Integer.parseInt((String) value));
 			
 		}
-		fireTableCellUpdated(row, col);
-		
+		fireTableDataChanged();
 	}
 	
 	

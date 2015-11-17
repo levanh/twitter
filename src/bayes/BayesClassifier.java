@@ -47,7 +47,7 @@ public class BayesClassifier {
 		float probaProd = 1;
 		
 		for(String word: wordSet){
-			probaProd = probaProd * ((+1)/())
+			probaProd = probaProd * ((+1)/());
 		}
 	}
 

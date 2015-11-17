@@ -33,9 +33,7 @@ public class SearchListener implements ActionListener {
 			cleaner.clean(result);
 		}
 
-
-		table.addAll(resultList);
-		
+		table.addAll(resultList);	
 	}
 
 }
