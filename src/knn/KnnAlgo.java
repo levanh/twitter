@@ -35,6 +35,7 @@ public class KnnAlgo {
 			}
 		}
 		return ((totalWords-commonWords)/(float)totalWords);
+
 	}
 	
 	public static void main(String[] args){
