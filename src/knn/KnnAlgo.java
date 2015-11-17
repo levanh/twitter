@@ -13,7 +13,8 @@ public class KnnAlgo {
 	}
 	
 	public float TweetDistance(Tweet t1, Tweet t2) {
-		
+		int commonWords;
+		String [] t1.getTweetContent().split(" ");
 	}
 	
 	
