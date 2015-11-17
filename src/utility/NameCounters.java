@@ -38,7 +38,19 @@ public class NameCounters {
 	}
 	
 	public static void splitTweetList(List<Tweet> app, List<Tweet> listePos, List<Tweet> listeNeu, List<Tweet> listeNeg){
-		
+		for(Tweet t: app){
+			switch(t.getNote().intValue()){
+			case 4:
+				listePos.add(t);
+				break;
+			case 2:
+				listeNeu.add(t);
+				break;
+			case 0:
+				listeNeg.add(t);
+				break;
+			}
+		}
 	}
 	
 	

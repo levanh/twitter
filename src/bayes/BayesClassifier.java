@@ -23,32 +23,47 @@ public class BayesClassifier {
 		this.combo = combo;
 	}
 	
-	public float getProbaTweet(Tweet t, List<Tweet> app) {
-		int ntot = NameCounters.countList(app);
+	public BayesResult getProbaTweet(Tweet t, List<Tweet> app) {
+		BayesResult res = new BayesResult();
+		int nTot = NameCounters.countList(app);
 		
 		List<Tweet> listePos = new ArrayList<Tweet>();
 		List<Tweet> listeNeu = new ArrayList<Tweet>();
 		List<Tweet> listeNeg = new ArrayList<Tweet>();
 		
+		//On cree des listes pour chaque classe, puis calculer leur nombre de mots et la probabilite de chaque classe
 		NameCounters.splitTweetList(app, listePos, listeNeu, listeNeg);
 		
 		int nPos = NameCounters.countList(listePos);
 		int nNeu = NameCounters.countList(listeNeu);
 		int nNeg = NameCounters.countList(listeNeg);
 		
-		float probPos = (float)nPos / ntot;
-		float probNeu = (float)nNeu / ntot;
-		float probNeg = (float)nNeg / ntot;
+		float probPos = (float)nPos / nTot;
+		float probNeu = (float)nNeu / nTot;
+		float probNeg = (float)nNeg / nTot;
+		
+		//On cree un ensemble contenant les differents mots du Tweet dont on veut evaluer la probabilite
 		
 		String[] parts = t.getTweetContent().split("\\s+");
 		
 		Set<String> wordSet = new HashSet<String>(Arrays.asList(parts));
 		
-		float probaProd = 1;
+		//On multiplie la probabilite de la classe par la probabilite du mot 
 		
 		for(String word: wordSet){
-			probaProd = probaProd * ((+1)/())
+			probPos = probPos * ((NameCounters.countNameList(listePos, word)+1)/(nPos+nTot));
+			probNeu = probNeu * ((NameCounters.countNameList(listeNeu, word)+1)/(nPos+nTot));
+			probNeg = probNeg * ((NameCounters.countNameList(listeNeg, word)+1)/(nPos+nTot));
 		}
+		
+		
+		res.setProbPos(probPos);
+		res.setProbNeu(probNeu);
+		res.setProbNeg(probNeg);
+		return res;
+	}
+	
+	public static void main(String[] args){
 	}
 
 }
