@@ -23,8 +23,6 @@ import utility.Tweet;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JPanel {
-
-
 	/**
 	 * Create the GUI and show it. For thread safety, this method should be
 	 * invoked from the event-dispatching thread.
@@ -38,7 +36,10 @@ public class MainWindow extends JPanel {
 		Container contentPane = frame.getContentPane();
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 
-		// Set up the search pane.
+		/**
+		 * Set up the search pane.
+		 */
+		
 		JPanel searchPane = new JPanel();
 		searchPane.setLayout(new FlowLayout());
 		searchPane.setBorder(new TitledBorder("Searching"));
@@ -55,23 +56,23 @@ public class MainWindow extends JPanel {
 		searchPane.add(searchLabel);
 		searchPane.add(searchField);
 		searchPane.add(searchTweetButton);
-		
-		
-		
-		
 
-		// Set up the tweets display pane.
+		/**
+		 * Set up the tweets display pane.
+		 */
+		
 		TweetAnnotationTable tweetPane = new TweetAnnotationTable();
-		//tweetPane.setLayout(new BoxLayout(tweetPane, BoxLayout.Y_AXIS));
 		
-		
-		
-		
-		
+	     // Set up table pane
+	     JScrollPane scrollPane = new JScrollPane(tweetPane.getTable());
+	     tweetPane.getTable().setFillsViewportHeight(true);
+	     
+	     // Display table
+	     tweetPane.add(scrollPane);
 
-		
-
-		// Set up the editing (cleaning, rating, saving, etc.) pane.
+		/**
+		 * Set up the editing (cleaning, rating, saving, etc.) pane.
+		 */
 		JPanel editPane = new JPanel();
 		
 		editPane.setLayout(new FlowLayout());
@@ -82,7 +83,6 @@ public class MainWindow extends JPanel {
 		loadField.setColumns(15);
 		
 		editPane.add(loadField);
-		
 		
 		JButton saveTweetButton = new JButton("Save in CSV base");
 		JButton loadTweetButton = new JButton("Load from CSV base");
@@ -104,6 +104,7 @@ public class MainWindow extends JPanel {
 
 		// Show the window.
 		frame.pack();
+		frame.setLocationByPlatform(true);
 		frame.getRootPane().setDefaultButton(searchTweetButton);
 		frame.setVisible(true);
 	}

@@ -43,6 +43,8 @@ public class KnnAlgo {
 		List<Tweet> kClose = new ArrayList<Tweet>();
 		for (int i = 0; i<k; i++) {
 			kClose.add(this.learningList.get(i));
+		}
+		for (int i = k; i<this.learningList.size(); i++) {
 			
 		}
 	}

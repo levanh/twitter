@@ -21,30 +21,21 @@ public class TweetAnnotationTable extends JPanel{
 	private static final long serialVersionUID = 1L;
 	
 	public TweetAnnotationTable(){
-
 		 super(new GridLayout(1,0));
 		 
 		 model = new TweetAnnotationModel();
-	     table = new JTable(model);
-	     table.setPreferredScrollableViewportSize(new Dimension(500, 300));
+	     setTable(new JTable(model));
+	     getTable().setPreferredScrollableViewportSize(new Dimension(500, 300));
 	     
-	     setNoteColumn(table.getColumnModel().getColumn(1));
+	     // Set up note column
+	     String[] Notes = {"-1", "0", "2", "4"};
+		 JComboBox<String> comboBox = new JComboBox<String>(Notes);
+		 
+	     table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(comboBox));
 	     
-	     JScrollPane scrollPane = new JScrollPane(table);
-	     table.setFillsViewportHeight(true);
-	     
-	     add(scrollPane);
-	     
-	}
-	
-	public void setNoteColumn(TableColumn noteColumn){
-		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.addItem("-1");
-		comboBox.addItem("0");
-		comboBox.addItem("2");
-		comboBox.addItem("4");
-		
-		noteColumn.setCellEditor(new DefaultCellEditor(comboBox));
+	     // Set up columns widths
+	     table.getColumnModel().getColumn(0).setPreferredWidth(475);
+	     table.getColumnModel().getColumn(1).setPreferredWidth(25);
 	}
 	
 	public TweetAnnotationModel getModel() {
@@ -57,6 +48,14 @@ public class TweetAnnotationTable extends JPanel{
 	
 	public void addAll(List<Tweet> list){
 		model.addAll(list);
+	}
+
+	public JTable getTable() {
+		return table;
+	}
+
+	public void setTable(JTable table) {
+		this.table = table;
 	}
 	
 
