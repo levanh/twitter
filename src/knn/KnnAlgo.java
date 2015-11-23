@@ -15,7 +15,7 @@ public class KnnAlgo {
 		this.learningList = learningList;
 	}
 	
-	public float tweetDistance(Tweet t1, Tweet t2) {
+	public static float tweetDistance(Tweet t1, Tweet t2) {
 		int commonWords = 0;
 		int totalWords = 0;
 		String[] wordList1 = t1.getTweetContent().split("\\s+");
@@ -41,8 +41,12 @@ public class KnnAlgo {
 	
 	public int knnResult(int k, Tweet t){
 		List<Tweet> kClose = new ArrayList<Tweet>();
+		Tweet temp;
+		float[] dist = new float[k];
 		for (int i = 0; i<k; i++) {
-			kClose.add(this.learningList.get(i));
+			temp = this.learningList.get(i);
+			kClose.add(temp);
+			dist[i] = KnnAlgo.tweetDistance(t, temp);
 		}
 		for (int i = k; i<this.learningList.size(); i++) {
 			
@@ -52,7 +56,6 @@ public class KnnAlgo {
 	public static void main(String[] args){
 		Tweet t1 = new Tweet("Ceci est test");
 		Tweet t2 = new Tweet("Ceci test est aussi");
-		KnnAlgo knn = new KnnAlgo(null);
-		System.out.println(knn.tweetDistance(t2, t1));
+		System.out.println(KnnAlgo.tweetDistance(t2, t1));
 	}
 }

@@ -32,18 +32,20 @@ public class TwitterSearch {
 	        	System.out.println("Test1");
 		        result = twitter.search(query);
 		        List<Status> tweets = result.getTweets();
+		        int j = 1;
 		        for (Status e: tweets) {
 		        	Tweet newTweet = new Tweet();
-		        	newTweet.setId(e.getId());
+		        	newTweet.setId(j);
 		        	newTweet.setUser(e.getUser().getScreenName());
 		        	newTweet.setTweetContent(e.getText());
 		        	newTweet.setCreationDate(e.getCreatedAt());
 		        	newTweet.setTopic(this.topic);
 		        	newTweet.setNote(-1);
 		        	searchList.add(newTweet);
+		        	j++;
 		        	query = result.nextQuery();
 		        }
-		        i++;
+		        j++;
 	        } while ((i<this.resNumber) && (query = result.nextQuery()) != null);
 	    } catch (TwitterException te) {
 	        te.printStackTrace();
