@@ -1,4 +1,4 @@
-package interfaceBuilder;
+package interfaceBuilder.listeners;
 
 import interfaceBuilder.table.TweetAnnotationTable;
 
