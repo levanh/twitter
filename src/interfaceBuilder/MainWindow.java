@@ -1,16 +1,25 @@
 package interfaceBuilder;
 
+import interfaceBuilder.itemListeners.FreqItemListener;
+import interfaceBuilder.listeners.BayesListener;
+import interfaceBuilder.listeners.KNNListener;
+import interfaceBuilder.listeners.LoadAppListener;
+import interfaceBuilder.listeners.LoadListener;
+import interfaceBuilder.listeners.SaveListener;
+import interfaceBuilder.listeners.SearchListener;
 import interfaceBuilder.table.TweetAnnotationTable;
 
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,6 +32,9 @@ import utility.Tweet;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JPanel {
+	
+	static List<Tweet> appList;
+	public static boolean freq;
 	/**
 	 * Create the GUI and show it. For thread safety, this method should be
 	 * invoked from the event-dispatching thread.
@@ -35,6 +47,8 @@ public class MainWindow extends JPanel {
 		// Set up the content pane, where the "main GUI" lives.
 		Container contentPane = frame.getContentPane();
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
+		
+		appList = new ArrayList<Tweet>();
 
 		/**
 		 * Set up the search pane.
@@ -85,10 +99,12 @@ public class MainWindow extends JPanel {
 		editPane.add(loadField);
 		
 		JButton saveTweetButton = new JButton("Save in CSV base");
-		JButton loadTweetButton = new JButton("Load from CSV base");
+		JButton loadTweetButton = new JButton("Load Test/Editing");
+		JButton loadAppButton = new JButton("Load Learning Set");
 
 		editPane.add(saveTweetButton);
 		editPane.add(loadTweetButton);
+		editPane.add(loadAppButton);
 
 		SearchListener searchListener = new SearchListener(searchField, tweetPane);
 		searchTweetButton.addActionListener(searchListener);
@@ -96,11 +112,55 @@ public class MainWindow extends JPanel {
 		saveTweetButton.addActionListener(saveListener);
 		LoadListener loadListener = new LoadListener(loadField, tweetPane);
 		loadTweetButton.addActionListener(loadListener);
+		LoadAppListener loadAppListener = new LoadAppListener(loadField, appList);
+		loadAppButton.addActionListener(loadAppListener);
+		
+		// Panel with results
+		
+		JPanel algoPane = new JPanel();
+		
+		GridLayout algoLayout = new GridLayout(2,3);
+		
+		algoLayout.setVgap(10);
+		algoLayout.setHgap(30);
+		
+		algoPane.setLayout(algoLayout);
+		algoPane.setBorder(new TitledBorder("Algorithms"));
+		
+		JCheckBox freqBayes = new JCheckBox("Frequence");
+		FreqItemListener freqListener = new FreqItemListener();
+		freqBayes.addItemListener(freqListener);
+		
+		JButton startKey = new JButton("Key");
+		JButton startKNN = new JButton("KNN");
+		JButton startBayes = new JButton("Bayes");
+		
+		algoPane.add(startKey);
+		algoPane.add(startKNN);
+		algoPane.add(freqBayes);
+		algoPane.add(startBayes);
+		
+		KNNListener knnListener = new KNNListener(tweetPane, appList);
+		startKNN.addActionListener(knnListener);
+		BayesListener bayesListener = new BayesListener(tweetPane, appList, freqBayes);
+		startBayes.addActionListener(bayesListener);
+		
+		
+		
+		
+		
+		
+		
+		
+		JPanel resultPane = new JPanel();
+		
 
 		// Add various panes to the content pane.
 		contentPane.add(searchPane);
 		contentPane.add(tweetPane);
 		contentPane.add(editPane);
+		contentPane.add(algoPane);
+		contentPane.add(resultPane);
 
 		// Show the window.
 		frame.pack();
@@ -118,4 +178,5 @@ public class MainWindow extends JPanel {
 			}
 		});
 	}
+	
 }

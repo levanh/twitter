@@ -2,13 +2,11 @@ package interfaceBuilder.listeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 import javax.swing.JTextField;
 
 import interfaceBuilder.table.TweetAnnotationTable;
 import utility.CSVReader;
-import utility.Tweet;
 
 public class LoadListener implements ActionListener {
 

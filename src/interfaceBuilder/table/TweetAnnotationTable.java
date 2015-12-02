@@ -25,7 +25,7 @@ public class TweetAnnotationTable extends JPanel{
 		 
 		 model = new TweetAnnotationModel();
 	     setTable(new JTable(model));
-	     getTable().setPreferredScrollableViewportSize(new Dimension(500, 300));
+	     getTable().setPreferredScrollableViewportSize(new Dimension(800, 300));
 	     
 	     // Set up note column
 	     String[] Notes = {"-1", "0", "2", "4"};
@@ -34,8 +34,8 @@ public class TweetAnnotationTable extends JPanel{
 	     table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(comboBox));
 	     
 	     // Set up columns widths
-	     table.getColumnModel().getColumn(0).setPreferredWidth(475);
-	     table.getColumnModel().getColumn(1).setPreferredWidth(25);
+	     table.getColumnModel().getColumn(0).setPreferredWidth(700);
+	     table.getColumnModel().getColumn(1).setPreferredWidth(100);
 	}
 	
 	public TweetAnnotationModel getModel() {

@@ -23,6 +23,23 @@ public class BayesClassifier {
 		this.combo = combo;
 	}
 	
+	public void bayesClassList(List<Tweet> test, List<Tweet> app){
+		
+		int nTot = NameCounters.countList(app);
+		
+		List<Tweet> listePos = new ArrayList<Tweet>();
+		List<Tweet> listeNeu = new ArrayList<Tweet>();
+		List<Tweet> listeNeg = new ArrayList<Tweet>();
+		
+		NameCounters.splitTweetList(app, listePos, listeNeu, listeNeg);
+		
+		int nPos = NameCounters.countList(listePos);
+		int nNeu = NameCounters.countList(listeNeu);
+		int nNeg = NameCounters.countList(listeNeg);
+	}
+	
+	
+	
 	public BayesResult getProbaTweet(Tweet t, List<Tweet> app) {
 		BayesResult res = new BayesResult();
 		int nTot = NameCounters.countList(app);
