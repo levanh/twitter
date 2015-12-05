@@ -85,6 +85,13 @@ public class TweetAnnotationModel extends AbstractTableModel {
 		}
 		fireTableDataChanged();
 	}
+
+	public void removeAll() {
+		data = new ArrayList<Tweet>();
+		fireTableStructureChanged();
+		System.out.println("done");
+		
+	}
 	
 	
 

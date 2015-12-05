@@ -6,6 +6,7 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.*;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -29,8 +30,13 @@ public class CSVReader {
 			source = new File(this.filename);
 			this.parser = CSVParser.parse(source, Charset.defaultCharset() , CSVFormat.DEFAULT);
 			for (CSVRecord csvRecord : parser) {
+				int temp = 0;
+				if (Integer.parseInt(csvRecord.get(5)) == 0)
+					temp = 2;
+				if (Integer.parseInt(csvRecord.get(5)) == 1)
+					temp = 4;
 			    Tweet newTweet = new Tweet(Long.parseLong(csvRecord.get(0)), csvRecord.get(1), csvRecord.get(2),
-			    		csvRecord.get(3), dateformat.parse(csvRecord.get(4)), Integer.parseInt(csvRecord.get(5)));
+			    		dateformat.parse(csvRecord.get(3)), csvRecord.get(4), temp);
 			    newList.add(newTweet);
 			}
 			this.parser.close();
@@ -44,5 +50,13 @@ public class CSVReader {
 		}
 		
 		return newList;
+	}
+	
+	public static void main(String[] args){
+		CSVReader r = new CSVReader("tweetstest.csv");
+		
+		
+		CSVGenerator g = new CSVGenerator("tweets.csv");
+		g.writeCSV(r.readCSV());
 	}
 }

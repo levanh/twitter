@@ -16,7 +16,7 @@ public class Tweet {
 	private Date creationDate;
 	private Integer note;
 	
-	public Tweet(long id, String user, String tweetContent, String topic, Date creationDate, Integer note) {
+	public Tweet(long id, String user, String tweetContent,  Date creationDate, String topic, Integer note) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -76,8 +76,8 @@ public class Tweet {
 		record.add(Long.toString(this.id));
 		record.add(this.user);
 		record.add(this.tweetContent);
-		record.add(this.topic);
 		record.add(dateformat.format(this.creationDate));
+		record.add(this.topic);
 		record.add(Integer.toString(this.note));
 		return record;
 	}

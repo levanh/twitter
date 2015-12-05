@@ -7,6 +7,7 @@ import interfaceBuilder.listeners.LoadAppListener;
 import interfaceBuilder.listeners.LoadListener;
 import interfaceBuilder.listeners.SaveListener;
 import interfaceBuilder.listeners.SearchListener;
+import interfaceBuilder.listeners.SplitAppListener;
 import interfaceBuilder.table.TweetAnnotationTable;
 
 import java.awt.Container;
@@ -134,17 +135,20 @@ public class MainWindow extends JPanel {
 		JButton startKey = new JButton("Key");
 		JButton startKNN = new JButton("KNN");
 		JButton startBayes = new JButton("Bayes");
+		JButton splitAppButton = new JButton("Diviser apprentissage");
 		
 		algoPane.add(startKey);
 		algoPane.add(startKNN);
 		algoPane.add(freqBayes);
 		algoPane.add(startBayes);
+		algoPane.add(splitAppButton);
 		
 		KNNListener knnListener = new KNNListener(tweetPane, appList);
 		startKNN.addActionListener(knnListener);
 		BayesListener bayesListener = new BayesListener(tweetPane, appList, freqBayes);
 		startBayes.addActionListener(bayesListener);
-		
+		SplitAppListener splitApp = new SplitAppListener(tweetPane, appList);
+		splitAppButton.addActionListener(splitApp);
 		
 		
 		

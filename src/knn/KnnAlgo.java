@@ -15,6 +15,11 @@ public class KnnAlgo {
 		this.learningList = learningList;
 	}
 	
+	public void noteTweet(int k, Tweet t){
+		t.setNote(this.majorityNote(knnResult(k, t)));
+		
+	}
+	
 	public static float tweetDistance(Tweet t1, Tweet t2) {
 		int commonWords = 0;
 		int totalWords = 0;
