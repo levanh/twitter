@@ -18,6 +18,9 @@ public class TweetCleaner {
 		cleaned = cleaned.replaceAll("\n", " ");
 		cleaned = cleaned.replaceAll("\t", " ");
 		cleaned = cleaned.replaceAll("\r", " ");
+		cleaned = cleaned.replaceAll("\\sRT\\s", " ");
+		cleaned = cleaned.replaceAll("#", "");
+		cleaned = cleaned.replaceAll("\\w*@\\w*", " ");
 		tweet.setTweetContent(cleaned);
 	}
 	

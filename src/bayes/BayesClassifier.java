@@ -15,13 +15,13 @@ public class BayesClassifier {
 
 	
 	private boolean type;
-	private WordChooser wordChoose;
+	private boolean wordChoose;
 	private WordCombo combo;
 	private Map<String, Integer> nameMapPos;
 	private Map<String, Integer> nameMapNeu;
 	private Map<String, Integer> nameMapNeg;
 	
-	public BayesClassifier(boolean type, WordChooser wordChoose, WordCombo combo) {
+	public BayesClassifier(boolean type, boolean wordChoose, WordCombo combo) {
 		super();
 		this.type = type;
 		this.wordChoose = wordChoose;
@@ -80,7 +80,7 @@ public class BayesClassifier {
 		for (Tweet t: test){
 			BayesResult br = getProbaTweet(t, nTot, nPos, nNeu, nNeg);
 			t.setNote(br.noteResult());
-			System.out.println(t.getTweetContent() + " : " + br.noteResult());
+			System.out.println( br.getProbPos() + " " + br.getProbNeu() + " " + br.getProbNeg() + " : " + br.noteResult() +" : " + t.getTweetContent());
 		}
 	}
 	
@@ -94,35 +94,42 @@ public class BayesClassifier {
 		//On cree des listes pour chaque classe, puis calculer leur nombre de mots et la probabilite de chaque classe
 		
 		
-		float probPos = (float)nPos / nTot;
-		float probNeu = (float)nNeu / nTot;
-		float probNeg = (float)nNeg / nTot;
+		double probPos = (double)nPos / nTot;
+		double probNeu = (double)nNeu / nTot;
+		double probNeg = (double)nNeg / nTot;
 		
 		//On cree un ensemble contenant les differents mots du Tweet dont on veut evaluer la probabilite
 		
 		String[] parts = t.getTweetContent().split("\\s+");
 		
-		Set<String> wordSet = new HashSet<String>(Arrays.asList(parts));
+		Iterable<String> wordIter;
+		
+		if (type){
+			wordIter = (Arrays.asList(parts));
+		}
+		else{
+			wordIter = new HashSet<String>(Arrays.asList(parts));
+		}
 		
 		//On multiplie la probabilite de la classe par la probabilite du mot 
 		
-		for(String word: wordSet){
+		for(String word: wordIter){
 			int temp;
 			if (nameMapPos.containsKey(word))
 				temp = nameMapPos.get(word);
 			else
 				temp = 0;
-			probPos = probPos * ((temp+1)/(nPos+nTot));
+			probPos = probPos * ((double)(temp+1)/(nPos+nTot));
 			if (nameMapNeu.containsKey(word))
 				temp = nameMapNeu.get(word);
 			else
 				temp = 0;
-			probNeu = probNeu * ((temp+1)/(nPos+nTot));
+			probNeu = probNeu * ((double)(temp+1)/(nNeu+nTot));
 			if (nameMapNeg.containsKey(word))
 				temp = nameMapNeg.get(word);
 			else
 				temp = 0;
-			probNeg = probNeg * ((temp+1)/(nPos+nTot));
+			probNeg = probNeg * ((double)(temp+1)/(nNeg+nTot));
 		}
 		
 		

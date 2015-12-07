@@ -5,6 +5,7 @@ import interfaceBuilder.listeners.BayesListener;
 import interfaceBuilder.listeners.KNNListener;
 import interfaceBuilder.listeners.LoadAppListener;
 import interfaceBuilder.listeners.LoadListener;
+import interfaceBuilder.listeners.ResetListener;
 import interfaceBuilder.listeners.SaveListener;
 import interfaceBuilder.listeners.SearchListener;
 import interfaceBuilder.listeners.SplitAppListener;
@@ -35,7 +36,6 @@ import utility.Tweet;
 public class MainWindow extends JPanel {
 	
 	static List<Tweet> appList;
-	public static boolean freq = false;
 	/**
 	 * Create the GUI and show it. For thread safety, this method should be
 	 * invoked from the event-dispatching thread.
@@ -116,11 +116,12 @@ public class MainWindow extends JPanel {
 		LoadAppListener loadAppListener = new LoadAppListener(loadField, appList);
 		loadAppButton.addActionListener(loadAppListener);
 		
+		
 		// Panel to launch algorithms
 		
 		JPanel algoPane = new JPanel();
 		
-		GridLayout algoLayout = new GridLayout(2,3);
+		GridLayout algoLayout = new GridLayout(3,3);
 		
 		algoLayout.setVgap(10);
 		algoLayout.setHgap(30);
@@ -131,26 +132,41 @@ public class MainWindow extends JPanel {
 		JCheckBox freqBayes = new JCheckBox("Frequence");
 		FreqItemListener freqListener = new FreqItemListener();
 		freqBayes.addItemListener(freqListener);
+		JCheckBox wordBayes = new JCheckBox("Pas de petits mots");
+		JCheckBox expAnalyse = new JCheckBox("Analyse expérimentale");
 		
 		JButton startKey = new JButton("Key");
+		startKey.setMaximumSize(new Dimension(50, 30));
+		
+		JTextField knnField = new JTextField();
+		knnField.setMaximumSize(new Dimension(100, 30));
+		knnField.setColumns(3);
+		
 		JButton startKNN = new JButton("KNN");
 		JButton startBayes = new JButton("Bayes");
 		JButton splitAppButton = new JButton("Diviser apprentissage");
+		JButton resetButton = new JButton("Reset");
 		
 		algoPane.add(startKey);
+		algoPane.add(knnField);
 		algoPane.add(startKNN);
 		algoPane.add(freqBayes);
+		algoPane.add(wordBayes);
 		algoPane.add(startBayes);
 		algoPane.add(splitAppButton);
+		algoPane.add(resetButton);
 		
 		JTextArea test = new JTextArea();
 		
-		KNNListener knnListener = new KNNListener(tweetPane, appList, test);
+		KNNListener knnListener = new KNNListener(tweetPane, appList, knnField, test);
 		startKNN.addActionListener(knnListener);
-		BayesListener bayesListener = new BayesListener(tweetPane, appList, test);
+		BayesListener bayesListener = new BayesListener(tweetPane, appList, freqBayes, wordBayes, test);
 		startBayes.addActionListener(bayesListener);
 		SplitAppListener splitApp = new SplitAppListener(tweetPane, appList);
 		splitAppButton.addActionListener(splitApp);
+		
+		ResetListener resetListener = new ResetListener(tweetPane, appList);
+		resetButton.addActionListener(resetListener);
 		
 		
 		
@@ -178,14 +194,7 @@ public class MainWindow extends JPanel {
 		frame.getRootPane().setDefaultButton(searchTweetButton);
 		frame.setVisible(true);
 	}
-	
-	public static void setFreq(boolean bool){
-		freq = bool;
-	}
-	
-	public static boolean getFreq(){
-		return freq;
-	}
+
 
 	public static void main(String[] args) {
 		// Schedule a job for the event-dispatching thread:

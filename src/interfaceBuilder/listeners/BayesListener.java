@@ -17,22 +17,25 @@ public class BayesListener implements ActionListener {
 	
 	private TweetAnnotationTable table;
 	private List<Tweet> app;
+	private JCheckBox freq;
+	private JCheckBox word;
 	private JTextArea text;
 	
 	
 
-	public BayesListener(TweetAnnotationTable table, List<Tweet> app,
-			JTextArea text) {
+	public BayesListener(TweetAnnotationTable table, List<Tweet> app, JCheckBox freq,JCheckBox word, JTextArea text) {
 		super();
 		this.table = table;
 		this.app = app;
+		this.freq = freq;
+		this.word = word;
 		this.text = text;
 	}
 
 
 
 	public void actionPerformed(ActionEvent e) {
-		BayesClassifier bc = new BayesClassifier(MainWindow.getFreq(), null, null);
+		BayesClassifier bc = new BayesClassifier(freq.isSelected(), word.isSelected(), null);
 
 		bc.bayesClassList(table.getModel().getData(), app);
 		table.getModel().fireTableDataChanged();

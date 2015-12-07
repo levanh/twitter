@@ -30,13 +30,8 @@ public class CSVReader {
 			source = new File(this.filename);
 			this.parser = CSVParser.parse(source, Charset.defaultCharset() , CSVFormat.DEFAULT);
 			for (CSVRecord csvRecord : parser) {
-				int temp = 0;
-				if (Integer.parseInt(csvRecord.get(5)) == 0)
-					temp = 2;
-				if (Integer.parseInt(csvRecord.get(5)) == 1)
-					temp = 4;
 			    Tweet newTweet = new Tweet(Long.parseLong(csvRecord.get(0)), csvRecord.get(1), csvRecord.get(2),
-			    		dateformat.parse(csvRecord.get(3)), csvRecord.get(4), temp);
+			    		dateformat.parse(csvRecord.get(3)), null, Integer.parseInt(csvRecord.get(5)));
 			    newList.add(newTweet);
 			}
 			this.parser.close();

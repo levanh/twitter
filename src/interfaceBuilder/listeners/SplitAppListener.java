@@ -22,7 +22,6 @@ public class SplitAppListener implements ActionListener {
 
 
 
-	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		int length = app.size();
 		length = length/5;

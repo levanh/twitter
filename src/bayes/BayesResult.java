@@ -1,9 +1,9 @@
 package bayes;
 
 public class BayesResult {
-	private float probPos;
-	private float probNeu;
-	private float probNeg;
+	private double probPos;
+	private double probNeu;
+	private double probNeg;
 	
 	public BayesResult() {
 		this.probPos = -1;
@@ -26,27 +26,27 @@ public class BayesResult {
 		}
 	}
 
-	public float getProbPos() {
+	public double getProbPos() {
 		return probPos;
 	}
 
-	public void setProbPos(float probPos) {
+	public void setProbPos(double probPos) {
 		this.probPos = probPos;
 	}
 
-	public float getProbNeu() {
+	public double getProbNeu() {
 		return probNeu;
 	}
 
-	public void setProbNeu(float probNeu) {
+	public void setProbNeu(double probNeu) {
 		this.probNeu = probNeu;
 	}
 
-	public float getProbNeg() {
+	public double getProbNeg() {
 		return probNeg;
 	}
 
-	public void setProbNeg(float probNeg) {
+	public void setProbNeg(double probNeg) {
 		this.probNeg = probNeg;
 	}
 	
