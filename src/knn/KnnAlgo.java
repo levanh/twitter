@@ -16,7 +16,9 @@ public class KnnAlgo {
 	}
 	
 	public void noteTweet(int k, Tweet t){
-		t.setNote(this.majorityNote(knnResult(k, t)));
+		int note = this.majorityNote(knnResult(k, t));
+		t.setNote(note);
+		System.out.println(t.getTweetContent() + " : " + note);
 		
 	}
 	

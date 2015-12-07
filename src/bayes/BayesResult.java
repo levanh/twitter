@@ -10,6 +10,21 @@ public class BayesResult {
 		this.probNeu = -1;
 		this.probNeg = -1;
 	}
+	
+	public int noteResult(){
+		if (probPos > probNeu){
+			if (probPos > probNeg)
+				return 4;
+			else
+				return 0;		
+		}
+		else{
+			if (probNeu > probNeg)
+				return 2;
+			else
+				return 0;
+		}
+	}
 
 	public float getProbPos() {
 		return probPos;

@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.JTextArea;
+
 import utility.Tweet;
 
 public class KNNListener implements ActionListener {
@@ -14,13 +16,15 @@ public class KNNListener implements ActionListener {
 	private TweetAnnotationTable table;
 	private List<Tweet> app;
 	private int knear;
+	private JTextArea text;
 
 	
 
-	public KNNListener(TweetAnnotationTable table, List<Tweet> app) {
+	public KNNListener(TweetAnnotationTable table, List<Tweet> app, JTextArea text) {
 		this.table = table;
 		this.app = app;
 		this.knear = 3;
+		this.text = text;
 	}
 
 
@@ -32,7 +36,7 @@ public class KNNListener implements ActionListener {
 		for (Tweet t: table.getModel().getData()){
 			knn.noteTweet(knear, t);
 		}
-		
+		table.getModel().fireTableDataChanged();
 	}
 
 }

@@ -2,8 +2,10 @@ package bayes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import utility.NameCounters;
@@ -13,13 +15,16 @@ public class BayesClassifier {
 
 	
 	private boolean type;
-	private WordChooser word;
+	private WordChooser wordChoose;
 	private WordCombo combo;
+	private Map<String, Integer> nameMapPos;
+	private Map<String, Integer> nameMapNeu;
+	private Map<String, Integer> nameMapNeg;
 	
-	public BayesClassifier(boolean type, WordChooser word, WordCombo combo) {
+	public BayesClassifier(boolean type, WordChooser wordChoose, WordCombo combo) {
 		super();
 		this.type = type;
-		this.word = word;
+		this.wordChoose = wordChoose;
 		this.combo = combo;
 	}
 	
@@ -36,24 +41,58 @@ public class BayesClassifier {
 		int nPos = NameCounters.countList(listePos);
 		int nNeu = NameCounters.countList(listeNeu);
 		int nNeg = NameCounters.countList(listeNeg);
+		
+		nameMapPos = new HashMap<String, Integer>();
+		nameMapNeu = new HashMap<String, Integer>();
+		nameMapNeg = new HashMap<String, Integer>();
+		
+		for (Tweet t: listePos){
+			String[] parts = t.getTweetContent().split("\\s+");
+			List<String> wordList = (Arrays.asList(parts));
+			for(String word: wordList){
+				if (nameMapPos.containsKey(word))
+					nameMapPos.put(word, nameMapPos.get(word) + 1);
+				else
+					nameMapPos.put(word, 1);
+			}
+		}
+		for (Tweet t: listeNeu){
+			String[] parts = t.getTweetContent().split("\\s+");
+			List<String> wordList = (Arrays.asList(parts));
+			for(String word: wordList){
+				if (nameMapNeu.containsKey(word))
+					nameMapNeu.put(word, nameMapNeu.get(word) + 1);
+				else
+					nameMapNeu.put(word, 1);
+			}
+		}
+		for (Tweet t: listeNeg){
+			String[] parts = t.getTweetContent().split("\\s+");
+			List<String> wordList = (Arrays.asList(parts));
+			for(String word: wordList){
+				if (nameMapNeg.containsKey(word))
+					nameMapNeg.put(word, nameMapNeg.get(word) + 1);
+				else
+					nameMapNeg.put(word, 1);
+			}
+		}
+		
+		for (Tweet t: test){
+			BayesResult br = getProbaTweet(t, nTot, nPos, nNeu, nNeg);
+			t.setNote(br.noteResult());
+			System.out.println(t.getTweetContent() + " : " + br.noteResult());
+		}
 	}
 	
 	
 	
-	public BayesResult getProbaTweet(Tweet t, List<Tweet> app) {
+	public BayesResult getProbaTweet(Tweet t,int nTot, int nPos, int nNeu, int nNeg) {
 		BayesResult res = new BayesResult();
-		int nTot = NameCounters.countList(app);
 		
-		List<Tweet> listePos = new ArrayList<Tweet>();
-		List<Tweet> listeNeu = new ArrayList<Tweet>();
-		List<Tweet> listeNeg = new ArrayList<Tweet>();
+		
 		
 		//On cree des listes pour chaque classe, puis calculer leur nombre de mots et la probabilite de chaque classe
-		NameCounters.splitTweetList(app, listePos, listeNeu, listeNeg);
 		
-		int nPos = NameCounters.countList(listePos);
-		int nNeu = NameCounters.countList(listeNeu);
-		int nNeg = NameCounters.countList(listeNeg);
 		
 		float probPos = (float)nPos / nTot;
 		float probNeu = (float)nNeu / nTot;
@@ -68,9 +107,22 @@ public class BayesClassifier {
 		//On multiplie la probabilite de la classe par la probabilite du mot 
 		
 		for(String word: wordSet){
-			probPos = probPos * ((NameCounters.countNameList(listePos, word)+1)/(nPos+nTot));
-			probNeu = probNeu * ((NameCounters.countNameList(listeNeu, word)+1)/(nPos+nTot));
-			probNeg = probNeg * ((NameCounters.countNameList(listeNeg, word)+1)/(nPos+nTot));
+			int temp;
+			if (nameMapPos.containsKey(word))
+				temp = nameMapPos.get(word);
+			else
+				temp = 0;
+			probPos = probPos * ((temp+1)/(nPos+nTot));
+			if (nameMapNeu.containsKey(word))
+				temp = nameMapNeu.get(word);
+			else
+				temp = 0;
+			probNeu = probNeu * ((temp+1)/(nPos+nTot));
+			if (nameMapNeg.containsKey(word))
+				temp = nameMapNeg.get(word);
+			else
+				temp = 0;
+			probNeg = probNeg * ((temp+1)/(nPos+nTot));
 		}
 		
 		

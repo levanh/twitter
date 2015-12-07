@@ -35,7 +35,7 @@ import utility.Tweet;
 public class MainWindow extends JPanel {
 	
 	static List<Tweet> appList;
-	public static boolean freq;
+	public static boolean freq = false;
 	/**
 	 * Create the GUI and show it. For thread safety, this method should be
 	 * invoked from the event-dispatching thread.
@@ -116,7 +116,7 @@ public class MainWindow extends JPanel {
 		LoadAppListener loadAppListener = new LoadAppListener(loadField, appList);
 		loadAppButton.addActionListener(loadAppListener);
 		
-		// Panel with results
+		// Panel to launch algorithms
 		
 		JPanel algoPane = new JPanel();
 		
@@ -143,9 +143,11 @@ public class MainWindow extends JPanel {
 		algoPane.add(startBayes);
 		algoPane.add(splitAppButton);
 		
-		KNNListener knnListener = new KNNListener(tweetPane, appList);
+		JTextArea test = new JTextArea();
+		
+		KNNListener knnListener = new KNNListener(tweetPane, appList, test);
 		startKNN.addActionListener(knnListener);
-		BayesListener bayesListener = new BayesListener(tweetPane, appList, freqBayes);
+		BayesListener bayesListener = new BayesListener(tweetPane, appList, test);
 		startBayes.addActionListener(bayesListener);
 		SplitAppListener splitApp = new SplitAppListener(tweetPane, appList);
 		splitAppButton.addActionListener(splitApp);
@@ -153,11 +155,15 @@ public class MainWindow extends JPanel {
 		
 		
 		
-		
+		//Panel to print results
 		
 		
 		JPanel resultPane = new JPanel();
+		resultPane.setLayout(new FlowLayout());
 		
+		
+		
+		resultPane.add(test);
 
 		// Add various panes to the content pane.
 		contentPane.add(searchPane);
@@ -171,6 +177,14 @@ public class MainWindow extends JPanel {
 		frame.setLocationByPlatform(true);
 		frame.getRootPane().setDefaultButton(searchTweetButton);
 		frame.setVisible(true);
+	}
+	
+	public static void setFreq(boolean bool){
+		freq = bool;
+	}
+	
+	public static boolean getFreq(){
+		return freq;
 	}
 
 	public static void main(String[] args) {
