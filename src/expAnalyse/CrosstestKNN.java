@@ -3,44 +3,56 @@ package expAnalyse;
 import java.util.ArrayList;
 import java.util.List;
 
+import knn.KnnAlgo;
+
+import utility.CSVReader;
 import utility.Tweet;
 
 public class CrosstestKNN {
 	
 	private List<Tweet> appBase;
+	private int k;
 	
+		
+	public CrosstestKNN(List<Tweet> appBase, int k) {
+		super();
+		this.appBase = appBase;
+		this.k = k;
+	}
+
 	public float crossTest(){
-		List<Tweet> oldList;
-		List<Tweet> newApplist = new ArrayList<Tweet>();
+		List<Tweet> noteList = new ArrayList<Tweet>();
+		List<Tweet> appList = new ArrayList<Tweet>();
 		int errors = 0;
 		int total = appBase.size();
-		List<List<Tweet>> splitList = new ArrayList<List<Tweet>>();
-		for (int i = 0; i<10; i++)
-			splitList.add(new ArrayList<Tweet>());
-		int cptPos = 0;
-		int cptNeu = 0;
-		int cptNeg = 0;
+		Tweet t = new Tweet();
+		List<List<Tweet>> splitList = CrosstestCreator.createXTest(appBase);
 		
-		for (Tweet t: appBase){
-			switch (t.getNote()){
-			case 4:
-				splitList.get(cptPos).add(t);
-				cptPos = (cptPos + 1) % 10;
-				break;
-			case 2:
-				splitList.get(cptNeu).add(t);
-				cptNeu = (cptNeu + 1) % 10;
-				break;
-			case 0:
-				splitList.get(cptNeg).add(t);
-				cptNeg = (cptNeg + 1) % 10;
-				break;
-			}
-		}
 		
 		for (int i = 0; i<10; i++){
-			oldList = splitList.get(i).;
+			CrosstestCreator.getNoteAndAppList(i, noteList, appList, splitList);
+			KnnAlgo knn = new KnnAlgo(appList);
+			System.out.println(noteList.size());
+			for (int j = 0;  j < noteList.size(); j++){
+				System.out.println(j);
+				t = noteList.get(j);
+				knn.noteTweet(k, t);
+				if (! splitList.get(i).get(j).getNote().equals(t.getNote())){
+					errors++;
+					System.out.println("Result: list "+i+" tweet "+j+" not equal "
+							+ t.getNote() +"   "+ splitList.get(i).get(j).getNote());
+				}
+			}
 		}
+		return (float)errors/total;
 		
+	}
+	
+	public static void main(String[] args){
+		CSVReader r = new CSVReader("tweets.csv");
+		List<Tweet> test = r.readCSV();
+		CrosstestKNN tester = new CrosstestKNN(test, 5);
+		
+		System.out.println(tester.crossTest());
 	}
 }

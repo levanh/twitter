@@ -82,4 +82,9 @@ public class Tweet {
 		return record;
 	}
 	
+	public Tweet copyToNote(){
+		return new Tweet(id, user, tweetContent,  creationDate,topic, -1);
+		
+	}
+	
 }
