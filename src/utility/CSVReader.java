@@ -6,7 +6,7 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.*;
+import java.util.Date;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -31,7 +31,7 @@ public class CSVReader {
 			this.parser = CSVParser.parse(source, Charset.defaultCharset() , CSVFormat.DEFAULT);
 			for (CSVRecord csvRecord : parser) {
 			    Tweet newTweet = new Tweet(Long.parseLong(csvRecord.get(0)), csvRecord.get(1), csvRecord.get(2),
-			    		dateformat.parse(csvRecord.get(3)), null, Integer.parseInt(csvRecord.get(5)));
+			    		null, csvRecord.get(4), Integer.parseInt(csvRecord.get(5)));
 			    newList.add(newTweet);
 			}
 			this.parser.close();
@@ -41,17 +41,22 @@ public class CSVReader {
 			System.out.println("IOFailed to load CSV from" + this.filename);
 		}
 		catch(Exception e){
-			System.out.println("Failed to load CSV from" + this.filename);
+			System.out.println("Failed to load CSV from " + this.filename);
 		}
 		
 		return newList;
 	}
 	
 	public static void main(String[] args){
-		CSVReader r = new CSVReader("tweetstest.csv");
+		CSVReader r = new CSVReader("tweets2.csv");
+		List<Tweet> test = r.readCSV();
 		
+		for (Tweet t: test){
+			TweetCleaner.getInstance().clean(t);
+			t.setCreationDate(new Date());
+		}
 		
-		CSVGenerator g = new CSVGenerator("tweets.csv");
-		g.writeCSV(r.readCSV());
+		CSVGenerator g = new CSVGenerator("tweets3.csv");
+		g.writeCSV(test);
 	}
 }
