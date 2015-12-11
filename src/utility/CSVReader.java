@@ -17,6 +17,7 @@ public class CSVReader {
 	private File source;
 	private String filename;
 	
+	//private static SimpleDateFormat dateformat = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
 	private static SimpleDateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
 	
 	public CSVReader(String filename){
@@ -31,7 +32,7 @@ public class CSVReader {
 			this.parser = CSVParser.parse(source, Charset.defaultCharset() , CSVFormat.DEFAULT);
 			for (CSVRecord csvRecord : parser) {
 			    Tweet newTweet = new Tweet(Long.parseLong(csvRecord.get(0)), csvRecord.get(1), csvRecord.get(2),
-			    		null, csvRecord.get(4), Integer.parseInt(csvRecord.get(5)));
+			    		dateformat.parse(csvRecord.get(3)), csvRecord.get(4), Integer.parseInt(csvRecord.get(5)));
 			    newList.add(newTweet);
 			}
 			this.parser.close();
@@ -48,15 +49,34 @@ public class CSVReader {
 	}
 	
 	public static void main(String[] args){
-		CSVReader r = new CSVReader("tweets2.csv");
+		CSVReader r = new CSVReader("tweets3.csv");
 		List<Tweet> test = r.readCSV();
-		
+		List<Tweet> newlist = new ArrayList<Tweet>();
+		int pos = 0;
+		int neg = 0;
+		int neu = 0;
 		for (Tweet t: test){
 			TweetCleaner.getInstance().clean(t);
-			t.setCreationDate(new Date());
+			switch(t.getNote()){
+			case 4:
+				pos++;
+				if (pos <110)
+					newlist.add(t);
+				break;
+			case 2:
+				neu++;
+				if (neu< 110)
+					newlist.add(t);
+				break;
+			case 0:
+				neg++;
+				if (neg<110)
+					newlist.add(t);
+				break;
+			}
 		}
 		
-		CSVGenerator g = new CSVGenerator("tweets3.csv");
-		g.writeCSV(test);
+		CSVGenerator g = new CSVGenerator("tweetsStable.csv");
+		g.writeCSV(newlist);
 	}
 }

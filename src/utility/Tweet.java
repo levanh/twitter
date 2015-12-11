@@ -79,6 +79,7 @@ public class Tweet {
 		record.add(dateformat.format(this.creationDate));
 		record.add(this.topic);
 		record.add(Integer.toString(this.note));
+		System.out.println(record);
 		return record;
 	}
 	

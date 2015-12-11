@@ -3,38 +3,47 @@ package expAnalyse;
 import java.util.ArrayList;
 import java.util.List;
 
-import knn.KnnAlgo;
-
+import bayes.BayesClassifier;
+import bayes.WordCombo;
 import utility.CSVReader;
 import utility.Tweet;
 
-public class CrosstestKNN {
-	
+public class CrosstestBayes {
+
 	private List<Tweet> appBase;
-	private int k;
+	private boolean type;
+	private boolean wordChoose;
+	private WordCombo combo;
 	
-		
-	public CrosstestKNN(List<Tweet> appBase, int k) {
+	
+	
+	public CrosstestBayes(List<Tweet> appBase, boolean type, boolean wordChoose, WordCombo combo) {
 		super();
 		this.appBase = appBase;
-		this.k = k;
+		this.type = type;
+		this.wordChoose = wordChoose;
+		this.combo = combo;
 	}
 
 	public float crossTest(){
-		KnnAlgo knn = new KnnAlgo(k);
+		BayesClassifier bc = new BayesClassifier(type, wordChoose, combo);
 		List<Tweet> noteList = new ArrayList<Tweet>();
 		List<Tweet> appList = new ArrayList<Tweet>();
 		int errors = 0;
 		int total = appBase.size();
 		Tweet t = new Tweet();
-		//for (Tweet tb: appBase)
-		//	tb.setTweetContent(tb.getTweetContent().toLowerCase());
+		for (Tweet tb: appBase)
+			tb.setTweetContent(tb.getTweetContent().toLowerCase());
 		List<List<Tweet>> splitList = CrosstestCreator.createXTest(appBase);
 		
 		
 		for (int i = 0; i<10; i++){
 			CrosstestCreator.getNoteAndAppList(i, noteList, appList, splitList);
-			knn.classList(noteList, appList);
+			
+			
+
+			bc.classList(noteList, appList);
+				
 			for (int j = 0;  j < noteList.size(); j++){
 				t = noteList.get(j);
 				if (! splitList.get(i).get(j).getNote().equals(t.getNote())){
@@ -44,6 +53,8 @@ public class CrosstestKNN {
 				}
 			}
 		}
+		System.out.println(errors);
+		System.out.println(total);
 		return (float)errors/total;
 		
 	}
@@ -51,8 +62,28 @@ public class CrosstestKNN {
 	public static void main(String[] args){
 		CSVReader r = new CSVReader("tweetsStable.csv");
 		List<Tweet> test = r.readCSV();
-		CrosstestKNN tester = new CrosstestKNN(test, 15);
+		/*int pos = 0;
+		int neu = 0;
+		int neg = 0;
+		for (Tweet t: test)
+			switch(t.getNote()){
+			case 4:
+				pos++;
+				break;
+			case 2:
+				neu++;
+				break;
+			case 0:
+				neg++;
+				break;
+			}
+		System.out.println(pos);
+		System.out.println(neu);
+		System.out.println(neg);*/
+		CrosstestBayes tester = new CrosstestBayes(test, true, false, null);
 		
 		System.out.println(tester.crossTest());
 	}
+	
+	
 }

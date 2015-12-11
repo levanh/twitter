@@ -28,7 +28,7 @@ public class BayesClassifier {
 		this.combo = combo;
 	}
 	
-	public void bayesClassList(List<Tweet> test, List<Tweet> app){
+	public void classList(List<Tweet> test, List<Tweet> app){
 		
 		int nTot = NameCounters.countList(app);
 		

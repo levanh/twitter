@@ -5,21 +5,28 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import utility.Classifier;
 import utility.Tweet;
 
-public class KnnAlgo {
+public class KnnAlgo implements Classifier {
 	
-	private List<Tweet> learningList;
+	private int k;
 
-	public KnnAlgo(List<Tweet> learningList) {
-		this.learningList = learningList;
+	public KnnAlgo(int k) {
+		this.k = k;
 	}
 	
-	public void noteTweet(int k, Tweet t){
-		int note = this.majorityNote(knnResult(k, t));
-		t.setNote(note);
-		System.out.println(t.getTweetContent() + " : " + note);
+	public void classList(List<Tweet> test, List<Tweet> app) {
+		for (Tweet t: test){
+			this.noteTweet(t, app);
+		}
 		
+	}
+	
+	public void noteTweet(Tweet t, List<Tweet> app){
+		int note = this.majorityNote(knnResult(t, app));
+		t.setNote(note);
+		//System.out.println(t.getTweetContent() + " : " + note);
 	}
 	
 	public static float tweetDistance(Tweet t1, Tweet t2) {
@@ -46,7 +53,7 @@ public class KnnAlgo {
 
 	}
 	
-	public List<Tweet> knnResult(int k, Tweet t){
+	public List<Tweet> knnResult(Tweet t, List<Tweet> app){
 		List<Tweet> kClose = new ArrayList<Tweet>();
 		Tweet temp;
 		float distTemp;
@@ -54,12 +61,12 @@ public class KnnAlgo {
 		float distMax;
 		float[] dist = new float[k];
 		for (int i = 0; i<k; i++) {
-			temp = this.learningList.get(i);
+			temp = app.get(i);
 			kClose.add(temp);
 			dist[i] = KnnAlgo.tweetDistance(t, temp);
 		}
-		for (int i = k; i<this.learningList.size(); i++) {
-			temp = this.learningList.get(i);
+		for (int i = k; i<app.size(); i++) {
+			temp = app.get(i);
 			distTemp = KnnAlgo.tweetDistance(t, temp);
 			indMax = 0;
 			distMax = dist[0];
@@ -113,4 +120,6 @@ public class KnnAlgo {
 		Tweet t2 = new Tweet("Ceci test est aussi");
 		System.out.println(KnnAlgo.tweetDistance(t2, t1));
 	}
+
+
 }

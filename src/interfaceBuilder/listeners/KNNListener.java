@@ -33,11 +33,12 @@ public class KNNListener implements ActionListener {
 
 
 	public void actionPerformed(ActionEvent e) {
-		KnnAlgo knn = new KnnAlgo(app);
 		int k = Integer.parseInt(knear.getText());
-		for (Tweet t: table.getModel().getData()){
-			knn.noteTweet(k, t);
-		}
+		KnnAlgo knn = new KnnAlgo(k);
+		for (Tweet t: table.getModel().getData())
+			t.setTweetContent(t.getTweetContent().toLowerCase());
+
+		knn.classList(table.getModel().getData(), app);
 		table.getModel().fireTableDataChanged();
 	}
 

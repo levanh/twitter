@@ -41,8 +41,8 @@ public class CrosstestCreator {
 	
 	public static void getNoteAndAppList(int n, List<Tweet> note, List<Tweet> app, List<List<Tweet>> appBase){
 		if (n < appBase.size()){
-			note = new ArrayList<Tweet>();
-			app = new ArrayList<Tweet>();
+			note.clear();
+			app.clear();
 			for (int i = 0; i<appBase.size(); i++){
 				if (i == n){
 					for (Tweet t: appBase.get(i)){

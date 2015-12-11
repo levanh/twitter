@@ -36,8 +36,10 @@ public class BayesListener implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		BayesClassifier bc = new BayesClassifier(freq.isSelected(), word.isSelected(), null);
+		for (Tweet t: table.getModel().getData())
+			t.setTweetContent(t.getTweetContent().toLowerCase());
 
-		bc.bayesClassList(table.getModel().getData(), app);
+		bc.classList(table.getModel().getData(), app);
 		table.getModel().fireTableDataChanged();
 	}
 
