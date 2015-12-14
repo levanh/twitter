@@ -28,7 +28,7 @@ public class LoadListener implements ActionListener {
 			CSVReader reader = new CSVReader(filename);
 			table.getModel().addAll(reader.readCSV());
 		}
-		this.text.setText("Le fichier "+ filename + " a été chargé pour la notation");
+		this.text.setText("Le fichier "+ filename + " a Ã©tÃ© chargÃ© pour la notation");
 	}
 
 }

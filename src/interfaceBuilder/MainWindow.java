@@ -70,7 +70,7 @@ public class MainWindow extends JPanel {
 		JLabel searchLabel = new JLabel("Mots clefs pour la recherche: ");
 		searchLabel.setLabelFor(searchField);
 		
-		JCheckBox configBox = new JCheckBox("Mode avec proxy pour l'universitÈ");
+		JCheckBox configBox = new JCheckBox("Mode avec proxy pour l'universit√©");
 		ChangeConfigListener configListener = new ChangeConfigListener();
 		configBox.addItemListener(configListener);
 
@@ -100,7 +100,7 @@ public class MainWindow extends JPanel {
 		JPanel editPane = new JPanel();
 		
 		editPane.setLayout(new FlowLayout());
-		editPane.setBorder(new TitledBorder("Tweets ‡ noter"));
+		editPane.setBorder(new TitledBorder("Tweets √† noter"));
 	
 		JTextField loadField = new JTextField();
 		loadField.setMaximumSize(new Dimension(100, 30));
@@ -143,10 +143,10 @@ public class MainWindow extends JPanel {
 		JLabel blank1 = new JLabel("");
 		JLabel blank2 = new JLabel("");
 		JLabel blank3 = new JLabel("");
-		JButton startKey = new JButton("Key");
+		JButton startKey = new JButton("Mots-cl√©s");
 		startKey.setMaximumSize(new Dimension(50, 30));
 		
-		JTextField knnField = new JTextField();
+		JTextField knnField = new JTextField("10");
 		knnField.setMaximumSize(new Dimension(100, 30));
 		knnField.setColumns(3);
 		JLabel knnLabel = new JLabel("Nombre de voisins pour KNN:");
@@ -209,7 +209,7 @@ public class MainWindow extends JPanel {
 		
 		JPanel resultPane = new JPanel();
 		resultPane.setLayout(new FlowLayout());
-		resultPane.setBorder(new TitledBorder("RÈsultats"));
+		resultPane.setBorder(new TitledBorder("R√©sultats"));
 		
 		
 		

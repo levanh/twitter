@@ -2,14 +2,12 @@ package interfaceBuilder.listeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import interfaceBuilder.table.TweetAnnotationTable;
 import utility.CSVGenerator;
-import utility.Tweet;
 
 public class SaveListener implements ActionListener {
 
@@ -30,7 +28,7 @@ public class SaveListener implements ActionListener {
 			CSVGenerator gener = new CSVGenerator(filename);
 			gener.writeCSV(table.getModel().getData());
 		}
-		this.text.setText("Le fichier "+ filename + " a été enregistré au format CSV");
+		this.text.setText("Le fichier "+ filename + " a Ã©tÃ© enregistrÃ© au format CSV");
 	}
 
 }

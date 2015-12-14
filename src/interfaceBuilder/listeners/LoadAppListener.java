@@ -2,13 +2,11 @@ package interfaceBuilder.listeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import interfaceBuilder.table.TweetAnnotationTable;
 import utility.CSVReader;
 import utility.Tweet;
 
@@ -33,7 +31,7 @@ public class LoadAppListener implements ActionListener {
 			app.addAll(reader.readCSV());
 			System.out.println(app);
 		}
-		this.text.setText("Le fichier "+ filename + " a été chargé comme base d'apprentissage");
+		this.text.setText("Le fichier "+ filename + " a Ã©tÃ© chargÃ© comme base d'apprentissage");
 	}
 
 }

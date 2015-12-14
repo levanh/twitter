@@ -27,43 +27,45 @@ public class KeyWordListener implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
+		this.text.setText("");
 		KeyWordClassifier kc = new KeyWordClassifier();
 		if (expAnalyse.isSelected()){
 			CrosstestCreator cross = new CrosstestCreator(app, kc);
 			float error = cross.crossTest()*100;
-			String result = "La validation croisée avec la classification par mots-clés a été réalisée.\n";
+			String result = "La validation croisÃ©e avec la classification par mots-clÃ©s a Ã©tÃ© rÃ©alisÃ©e.\n";
 			result = result + "Le taux d'erreur obtenu est de " + error + "%.";
 			this.text.setText(result);
 		}
-		for (Tweet t: table.getModel().getData())
-			t.setTweetContent(t.getTweetContent().toLowerCase());
-		kc.classList(table.getModel().getData(), app);
-		table.getModel().fireTableDataChanged();
-		table.getModel().fireTableDataChanged();
-		int tot = 0;
-		int pos = 0;
-		int neu = 0;
-		int neg = 0;
-		for(Tweet t: table.getModel().getData()){
-		switch (t.getNote()){
-			case 4:
-				pos++;
-				break;
-			case 2:
-				neu++;
-				break;
-			case 0:
-				neg++;
-				break;
+		else{
+			for (Tweet t: table.getModel().getData())
+				t.setTweetContent(t.getTweetContent().toLowerCase());
+			kc.classList(table.getModel().getData(), app);
+			table.getModel().fireTableDataChanged();
+			int tot = 0;
+			int pos = 0;
+			int neu = 0;
+			int neg = 0;
+			for(Tweet t: table.getModel().getData()){
+			switch (t.getNote()){
+				case 4:
+					pos++;
+					break;
+				case 2:
+					neu++;
+					break;
+				case 0:
+					neg++;
+					break;
+				}
+			tot++;
 			}
-		tot++;
+			String result = "Les tweets ont Ã©tÃ© annotÃ©s automatiquement avec la classification par mots-clÃ©s.\n";
+			result = result + "On obtient la tendance suivante:";
+			result = result + "Tweets positifs: " + ((float)pos*100/tot) + "%.";
+			result = result + "Tweets neutres: " + ((float)neu*100/tot) + "%.";
+			result = result + "Tweets nÃ©gatifs: " + ((float)neg*100/tot) + "%.";
+			this.text.setText(result);
 		}
-		String result = "Les tweets ont été annotés automatiquement avec la classification par mots-clés.\n";
-		result = result + "On obtient la tendance suivante:";
-		result = result + "Tweets positifs: " + ((float)pos/tot) + "%.";
-		result = result + "Tweets neutres: " + ((float)neu/tot) + "%.";
-		result = result + "Tweets négatifs: " + ((float)neg/tot) + "%.";
-		this.text.setText(result);
 	}
 	
 	

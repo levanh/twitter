@@ -51,7 +51,7 @@ public class KNNListener implements ActionListener {
 		if (expAnalyse.isSelected()){
 			CrosstestCreator cross = new CrosstestCreator(app, knn);
 			float error = cross.crossTest()*100;
-			String result = "La validation croisée avec la classification par KNN et les options choisies a été réalisée.\n";
+			String result = "La validation croisÃ©e avec la classification par KNN et les options choisies a Ã©tÃ© rÃ©alisÃ©e.\n";
 			result = result + "Le taux d'erreur obtenu est de " + error + "%.";
 			this.text.setText(result);
 		}
@@ -60,7 +60,6 @@ public class KNNListener implements ActionListener {
 				t.setTweetContent(t.getTweetContent().toLowerCase());
 	
 			knn.classList(table.getModel().getData(), app);
-			table.getModel().fireTableDataChanged();
 			table.getModel().fireTableDataChanged();
 			int tot = 0;
 			int pos = 0;
@@ -80,11 +79,11 @@ public class KNNListener implements ActionListener {
 				}
 			tot++;
 			}
-			String result = "Les tweets ont été annotés automatiquement avec la classification par KNN.\n";
+			String result = "Les tweets ont Ã©tÃ© annotÃ©s automatiquement avec la classification par KNN.\n";
 			result = result + "On obtient la tendance suivante:";
-			result = result + "Tweets positifs: " + ((float)pos/tot) + "%.";
-			result = result + "Tweets neutres: " + ((float)neu/tot) + "%.";
-			result = result + "Tweets négatifs: " + ((float)neg/tot) + "%.";
+			result = result + "Tweets positifs: " + ((float)pos*100/tot) + "%.";
+			result = result + "Tweets neutres: " + ((float)neu*100/tot) + "%.";
+			result = result + "Tweets nÃ©gatifs: " + ((float)neg*100/tot) + "%.";
 			this.text.setText(result);
 		}
 	}

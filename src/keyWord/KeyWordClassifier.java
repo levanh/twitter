@@ -64,7 +64,7 @@ public class KeyWordClassifier implements Classifier{
         }
 	}
 
-	@Override
+	
 	public void classList(List<Tweet> test, List<Tweet> app) {
 		for (Tweet t: test){
 			int pos = 0;

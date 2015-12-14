@@ -3,7 +3,6 @@ package expAnalyse;
 import java.util.ArrayList;
 import java.util.List;
 
-import bayes.BayesClassifier;
 import knn.KnnClassifier;
 import knn.StandardDistance;
 import utility.CSVReader;

@@ -11,7 +11,6 @@ import javax.swing.JTextArea;
 
 import bayes.BayesClassifier;
 import expAnalyse.CrosstestCreator;
-import utility.Classifier;
 import utility.Tweet;
 
 public class BayesListener implements ActionListener {
@@ -45,7 +44,7 @@ public class BayesListener implements ActionListener {
 		if (expAnalyse.isSelected()){
 			CrosstestCreator cross = new CrosstestCreator(app, bc);
 			float error = cross.crossTest()*100;
-			String result = "La validation croisée avec la classification Bayesienne et les options choisies a été réalisée.\n";
+			String result = "La validation croisÃ©e avec la classification Bayesienne et les options choisies a Ã©tÃ© rÃ©alisÃ©e.\n";
 			result = result + "Le taux d'erreur obtenu est de " + error + "%.";
 			this.text.setText(result);
 		}
@@ -74,11 +73,11 @@ public class BayesListener implements ActionListener {
 				}
 			tot++;
 			}
-			String result = "Les tweets ont été annotés automatiquement avec la classification Bayesienne.\n";
+			String result = "Les tweets ont Ã©tÃ© annotÃ©s automatiquement avec la classification Bayesienne.\n";
 			result = result + "On obtient la tendance suivante:\n";
-			result = result + "Tweets positifs: " + ((float)pos/tot) + "%.\n";
-			result = result + "Tweets neutres: " + ((float)neu/tot) + "%.\n";
-			result = result + "Tweets négatifs: " + ((float)neg/tot) + "%.\n";
+			result = result + "Tweets positifs: " + ((float)pos*100/tot) + "%.\n";
+			result = result + "Tweets neutres: " + ((float)neu*100/tot) + "%.\n";
+			result = result + "Tweets nÃ©gatifs: " + ((float)neg*100/tot) + "%.\n";
 			this.text.setText(result);
 		}
 	}
