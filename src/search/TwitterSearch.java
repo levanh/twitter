@@ -46,6 +46,7 @@ public class TwitterSearch {
 		        	query = result.nextQuery();
 		        }
 		        j++;
+		        i++;
 	        } while ((i<this.resNumber) && (query = result.nextQuery()) != null);
 	    } catch (TwitterException te) {
 	        te.printStackTrace();

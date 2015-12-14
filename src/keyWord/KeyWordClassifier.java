@@ -66,7 +66,24 @@ public class KeyWordClassifier implements Classifier{
 
 	@Override
 	public void classList(List<Tweet> test, List<Tweet> app) {
-		// TODO Auto-generated method stub
+		for (Tweet t: test){
+			int pos = 0;
+			int neg = 0;
+			List<String> words = Arrays.asList(t.getTweetContent().split(" "));
+			for (String s:words){
+				if (posWord.contains(s))
+					pos++;
+				if (negWord.contains(s))
+					neg++;
+			}
+			if (pos > neg)
+				t.setNote(4);
+			else if (neg > pos)
+				t.setNote(0);
+			else
+				t.setNote(2);
+			
+		}
 		
 	}
 	

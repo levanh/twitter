@@ -1,8 +1,9 @@
 package interfaceBuilder;
 
-import interfaceBuilder.itemListeners.FreqItemListener;
+import interfaceBuilder.itemListeners.ChangeConfigListener;
 import interfaceBuilder.listeners.BayesListener;
 import interfaceBuilder.listeners.KNNListener;
+import interfaceBuilder.listeners.KeyWordListener;
 import interfaceBuilder.listeners.LoadAppListener;
 import interfaceBuilder.listeners.LoadListener;
 import interfaceBuilder.listeners.ResetListener;
@@ -14,7 +15,6 @@ import interfaceBuilder.table.TweetAnnotationTable;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import utility.ChangeConfig;
 import utility.Tweet;
 
 @SuppressWarnings("serial")
@@ -41,8 +42,10 @@ public class MainWindow extends JPanel {
 	 * invoked from the event-dispatching thread.
 	 */
 	private static void createAndShowGUI() {
+		
+		ChangeConfig.standardConfig();
 		// Create and set up the window.
-		JFrame frame = new JFrame("Tweet Search");
+		JFrame frame = new JFrame("Tweet Annoter");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Set up the content pane, where the "main GUI" lives.
@@ -50,6 +53,7 @@ public class MainWindow extends JPanel {
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 		
 		appList = new ArrayList<Tweet>();
+		JTextArea resultArea = new JTextArea(5,50);
 
 		/**
 		 * Set up the search pane.
@@ -57,20 +61,25 @@ public class MainWindow extends JPanel {
 		
 		JPanel searchPane = new JPanel();
 		searchPane.setLayout(new FlowLayout());
-		searchPane.setBorder(new TitledBorder("Searching"));
+		searchPane.setBorder(new TitledBorder("Recherche"));
 
 		JTextField searchField = new JTextField();
 		searchField.setMaximumSize(new Dimension(100, 30));
 		searchField.setColumns(15);
 
-		JLabel searchLabel = new JLabel("Tweet keyword(s): ");
+		JLabel searchLabel = new JLabel("Mots clefs pour la recherche: ");
 		searchLabel.setLabelFor(searchField);
+		
+		JCheckBox configBox = new JCheckBox("Mode avec proxy pour l'université");
+		ChangeConfigListener configListener = new ChangeConfigListener();
+		configBox.addItemListener(configListener);
 
-		JButton searchTweetButton = new JButton("Search");
+		JButton searchTweetButton = new JButton("Rechercher");
 
 		searchPane.add(searchLabel);
 		searchPane.add(searchField);
 		searchPane.add(searchTweetButton);
+		searchPane.add(configBox);
 
 		/**
 		 * Set up the tweets display pane.
@@ -91,7 +100,7 @@ public class MainWindow extends JPanel {
 		JPanel editPane = new JPanel();
 		
 		editPane.setLayout(new FlowLayout());
-		editPane.setBorder(new TitledBorder("Editing"));
+		editPane.setBorder(new TitledBorder("Tweets à noter"));
 	
 		JTextField loadField = new JTextField();
 		loadField.setMaximumSize(new Dimension(100, 30));
@@ -99,9 +108,9 @@ public class MainWindow extends JPanel {
 		
 		editPane.add(loadField);
 		
-		JButton saveTweetButton = new JButton("Save in CSV base");
-		JButton loadTweetButton = new JButton("Load Test/Editing");
-		JButton loadAppButton = new JButton("Load Learning Set");
+		JButton saveTweetButton = new JButton("Enregistrer en CSV");
+		JButton loadTweetButton = new JButton("Charger pour annotation");
+		JButton loadAppButton = new JButton("Charger pour apprentissage");
 
 		editPane.add(saveTweetButton);
 		editPane.add(loadTweetButton);
@@ -109,11 +118,11 @@ public class MainWindow extends JPanel {
 
 		SearchListener searchListener = new SearchListener(searchField, tweetPane);
 		searchTweetButton.addActionListener(searchListener);
-		SaveListener saveListener = new SaveListener(loadField, tweetPane);
+		SaveListener saveListener = new SaveListener(loadField, tweetPane, resultArea);
 		saveTweetButton.addActionListener(saveListener);
-		LoadListener loadListener = new LoadListener(loadField, tweetPane);
+		LoadListener loadListener = new LoadListener(loadField, tweetPane, resultArea);
 		loadTweetButton.addActionListener(loadListener);
-		LoadAppListener loadAppListener = new LoadAppListener(loadField, appList);
+		LoadAppListener loadAppListener = new LoadAppListener(loadField, appList, resultArea);
 		loadAppButton.addActionListener(loadAppListener);
 		
 		
@@ -121,46 +130,70 @@ public class MainWindow extends JPanel {
 		
 		JPanel algoPane = new JPanel();
 		
-		GridLayout algoLayout = new GridLayout(3,3);
+		GridLayout algoLayout = new GridLayout(4,4);
 		
 		algoLayout.setVgap(10);
 		algoLayout.setHgap(30);
 		
 		algoPane.setLayout(algoLayout);
-		algoPane.setBorder(new TitledBorder("Algorithms"));
+		algoPane.setBorder(new TitledBorder("Algorithmes"));
 		
-		JCheckBox freqBayes = new JCheckBox("Frequence");
-		FreqItemListener freqListener = new FreqItemListener();
-		freqBayes.addItemListener(freqListener);
-		JCheckBox wordBayes = new JCheckBox("Pas de petits mots");
-		JCheckBox expAnalyse = new JCheckBox("Analyse expÃ©rimentale");
 		
+		
+		JLabel blank1 = new JLabel("");
+		JLabel blank2 = new JLabel("");
+		JLabel blank3 = new JLabel("");
 		JButton startKey = new JButton("Key");
 		startKey.setMaximumSize(new Dimension(50, 30));
 		
 		JTextField knnField = new JTextField();
 		knnField.setMaximumSize(new Dimension(100, 30));
 		knnField.setColumns(3);
-		
+		JLabel knnLabel = new JLabel("Nombre de voisins pour KNN:");
+		knnLabel.setLabelFor(knnField);
+		JCheckBox distKNN = new JCheckBox("Distance de Levenshtein?");
 		JButton startKNN = new JButton("KNN");
+		
+		JCheckBox freqBayes = new JCheckBox("Frequence");
+		JCheckBox wordBayes = new JCheckBox("Pas de petits mots");
+		JCheckBox biBayes = new JCheckBox("Avec bi-grammes");
 		JButton startBayes = new JButton("Bayes");
+		
+		
 		JButton splitAppButton = new JButton("Diviser apprentissage");
 		JButton resetButton = new JButton("Reset");
+		JCheckBox expAnalyse = new JCheckBox("Analyse experimentale");
 		
+		//First line
+		algoPane.add(blank1);
+		algoPane.add(blank2);
+		algoPane.add(blank3);
 		algoPane.add(startKey);
+		
+		//Second line, knn
+		algoPane.add(knnLabel);
 		algoPane.add(knnField);
+		algoPane.add(distKNN);
 		algoPane.add(startKNN);
+		
+		//Third line, Bayes
 		algoPane.add(freqBayes);
 		algoPane.add(wordBayes);
+		algoPane.add(biBayes);
 		algoPane.add(startBayes);
+		
+		//Fourth line, options
 		algoPane.add(splitAppButton);
 		algoPane.add(resetButton);
+		algoPane.add(expAnalyse);
 		
-		JTextArea test = new JTextArea();
 		
-		KNNListener knnListener = new KNNListener(tweetPane, appList, knnField, test);
+		
+		KeyWordListener keyWordListener = new KeyWordListener(tweetPane, appList ,resultArea,  expAnalyse, resultArea);
+		startKey.addActionListener(keyWordListener);
+		KNNListener knnListener = new KNNListener(tweetPane, appList, knnField, distKNN,  expAnalyse, resultArea);
 		startKNN.addActionListener(knnListener);
-		BayesListener bayesListener = new BayesListener(tweetPane, appList, freqBayes, wordBayes, test);
+		BayesListener bayesListener = new BayesListener(tweetPane, appList, freqBayes, wordBayes, biBayes, expAnalyse, resultArea);
 		startBayes.addActionListener(bayesListener);
 		SplitAppListener splitApp = new SplitAppListener(tweetPane, appList);
 		splitAppButton.addActionListener(splitApp);
@@ -176,10 +209,11 @@ public class MainWindow extends JPanel {
 		
 		JPanel resultPane = new JPanel();
 		resultPane.setLayout(new FlowLayout());
+		resultPane.setBorder(new TitledBorder("Résultats"));
 		
 		
 		
-		resultPane.add(test);
+		resultPane.add(resultArea);
 
 		// Add various panes to the content pane.
 		contentPane.add(searchPane);

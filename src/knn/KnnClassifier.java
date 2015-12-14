@@ -8,12 +8,14 @@ import java.util.Set;
 import utility.Classifier;
 import utility.Tweet;
 
-public class KnnAlgo implements Classifier {
+public class KnnClassifier implements Classifier {
 	
 	private int k;
+	private DistanceCalculator distCalc;
 
-	public KnnAlgo(int k) {
+	public KnnClassifier(int k, DistanceCalculator distCalc) {
 		this.k = k;
+		this.distCalc = distCalc;
 	}
 	
 	public void classList(List<Tweet> test, List<Tweet> app) {
@@ -29,29 +31,6 @@ public class KnnAlgo implements Classifier {
 		//System.out.println(t.getTweetContent() + " : " + note);
 	}
 	
-	public static float tweetDistance(Tweet t1, Tweet t2) {
-		int commonWords = 0;
-		int totalWords = 0;
-		String[] wordList1 = t1.getTweetContent().split("\\s+");
-		String[] wordList2 = t2.getTweetContent().split("\\s+");
-		Set<String> wordSet1 = new HashSet<String>();
-		Set<String> wordSet2 = new HashSet<String>();
-		for (int i = 0; i<wordList1.length;i++){
-			if(wordSet1.add(wordList1[i]))
-				totalWords++;
-		}
-		for (int j = 0; j<wordList2.length;j++){
-			if(wordSet1.contains(wordList2[j])) {
-				commonWords++;
-			}
-			else {
-				if(wordSet2.add(wordList2[j]))
-					totalWords++;
-			}
-		}
-		return ((totalWords-commonWords)/(float)totalWords);
-
-	}
 	
 	public List<Tweet> knnResult(Tweet t, List<Tweet> app){
 		List<Tweet> kClose = new ArrayList<Tweet>();
@@ -63,11 +42,11 @@ public class KnnAlgo implements Classifier {
 		for (int i = 0; i<k; i++) {
 			temp = app.get(i);
 			kClose.add(temp);
-			dist[i] = KnnAlgo.tweetDistance(t, temp);
+			dist[i] = distCalc.tweetDistance(t, temp);
 		}
 		for (int i = k; i<app.size(); i++) {
 			temp = app.get(i);
-			distTemp = KnnAlgo.tweetDistance(t, temp);
+			distTemp = distCalc.tweetDistance(t, temp);
 			indMax = 0;
 			distMax = dist[0];
 			for (int j = 1; j<k; j++){
@@ -117,8 +96,8 @@ public class KnnAlgo implements Classifier {
 	
 	public static void main(String[] args){
 		Tweet t1 = new Tweet("Ceci est test");
-		Tweet t2 = new Tweet("Ceci test est aussi");
-		System.out.println(KnnAlgo.tweetDistance(t2, t1));
+		Tweet t2 = new Tweet("Ceci change test mieux");
+		System.out.println(LevenshteinDistance.getInstance().tweetDistance(t2, t1));
 	}
 
 
